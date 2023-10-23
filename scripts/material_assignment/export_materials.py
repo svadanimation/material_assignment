@@ -32,6 +32,12 @@ def export_shaders(shader_filepath, assignment_filepath, vray_proxy):
     if not plugin_check(PLUGINS):
         return False
     
+    # ensure object is VRayProxy
+    if (not mc.objExists(vray_proxy) 
+        or not mc.objectType(vray_proxy) == 'VRayProxy'):
+        print (f'{vray_proxy} is not a VRayProxy')
+        return False
+    
     shaders = connected_materials(vray_proxy)
     if not shaders:
         return False
