@@ -10,7 +10,7 @@ def import_proxy(filepath, name):
     pass
 
 def apply():
-    # list all vray proxies in scene
+    # list all sel vray proxies in scene
     # for each proxy
         # figure out file paths
         # or get it from reference node
@@ -57,6 +57,8 @@ def apply_shaders(shader_filepath, assignment_filepath, vray_proxy, name=''):
         return False
     
     # ensure object is VRayProxy
+    # TODO split this to its own function
+    # take an asset name as input
     if (not mc.objExists(vray_proxy) 
         or not mc.objectType(vray_proxy) == 'VRayProxy'):
         print (f'{vray_proxy} is not a VRayProxy')
@@ -64,7 +66,7 @@ def apply_shaders(shader_filepath, assignment_filepath, vray_proxy, name=''):
 
     # failover to name if not explicitly set
     if not name:
-        name = os.path.basename(assignment_filepath).split('.')[0]
+        name = os.path.basename(shader_filepath).split('.')[0]
 
     # derive reference name
     reference_name = name + 'RN'
