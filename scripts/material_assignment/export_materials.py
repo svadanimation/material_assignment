@@ -163,3 +163,12 @@ def plugin_check(plugins = []):
                 return False
             
     return True
+
+def get_proxy_from_selection(selection):
+    proxy_list = []
+    for shape in selection:
+        sel_shape = mc.listRelatives(shape, s=True)[0]
+        if mc.objectType(sel_shape) == 'VRayProxy':
+            proxy_list.append(sel_shape)    
+
+    return proxy_list
