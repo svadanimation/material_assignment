@@ -7,8 +7,8 @@ import alembic
 import maya.cmds as mc
 
 # prism
-import PrismInit
-core = PrismInit.pcore
+# import PrismInit
+# core = PrismInit.pcore
 
 # vray
 import vray.aetemplates.AEVRayProxyTemplate as vrayIO
@@ -258,7 +258,7 @@ def set_io_params():
     )
 
 def get_current_context(shot=False):
-    filepath = core.getCurrentFileName()
+    filepath = self.core.getCurrentFileName()
 
     if filepath == 'unknown':
         mc.warning("Context is unknown. Export aborted.")
@@ -270,7 +270,7 @@ def get_current_context(shot=False):
         try:
             # asset = ref_path.split("Export/")[1].split("/", 1)[0]
             # asset = filepath.split("Export/")[1].split("/", 1)[0]
-            path = f"{core.projectPath}\\03_Production\\Shots"
+            path = f"{self.core.projectPath}\\03_Production\\Shots"
         except:
             mc.warning("Not in proper context. Please move to Shot context.")
             context_passed = False
@@ -283,8 +283,8 @@ def get_current_context(shot=False):
             mc.error("Not in proper context. Please move to Look or Light.")
             return False
 
-        look_dir = f"{core.projectPath}\\03_Production\\Assets\\Characters\\{asset}\\Look"
-        light_dir = f"{core.projectPath}\\03_Production\\Assets\\Characters\\{asset}\\Light"
+        look_dir = f"{self.core.projectPath}\\03_Production\\Assets\\Characters\\{asset}\\Look"
+        light_dir = f"{self.core.projectPath}\\03_Production\\Assets\\Characters\\{asset}\\Light"
         
         if not os.path.isdir(look_dir) or not os.path.isdir(look_dir):
             return False

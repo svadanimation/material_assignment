@@ -4,21 +4,15 @@ import importlib
 import sys
 import os
 import PrismInit
-sys.path.append("Z:\\junior_year\\F23\\collab\\git_repos\\material_assignment\\")
-from scripts.material_assignment import export_materials as em
-importlib.reload(em)
+from material_assignment import export_materials as em
 
-CORE = PrismInit.pcore
+core = PrismInit.pcore
 
-# placeholders to be determined by user
-export_single = False
-from_selected = False
-export_all = True
-
-CURRENT_PATH = CORE.getCurrentFileName()
-CHECK_CONTEXT = em.get_current_context(filepath=CURRENT_PATH)
 
 def proxy_export_single():
+    if not em.get_current_context():
+        return
+
     if len(mc.ls(sl=True)) == 0:
         mc.warning("Cannot export nothing. Please select a vrayproxy for export")
         return
@@ -29,26 +23,34 @@ def proxy_export_single():
     proxy = em.get_proxy_from_selection(mc.ls(sl=True))[0]
     materials = em.connected_materials(proxy)
 
-    asset = CURRENT_PATH.split("Characters\\")[1].split("\\", 1)[0]
-    look_dir = f"{CORE.projectPath}03_Production\\Assets\\Characters\\{asset}\\Look"
+    asset = core.getCurrentFileName().split("Characters\\")[1].split("\\", 1)[0]
+    look_dir = f"{core.projectPath}03_Production\\Assets\\Characters\\{asset}\\Look"
     look_file = f"{look_dir}\\look.ma"
     assignment_file = f"{look_dir}\\assignment.xml"
 
     em.export_shaders(look_file, assignment_file, proxy)
 
 def proxy_export_all():
+    if not em.get_current_context():
+        return
+
     proxy_list = mc.ls(type='VRayProxy')
 
     for proxy in proxy_list:
         materials = em.connected_materials(proxy)
         asset = mc.getAttr(f"{proxy}.fileName").split("Characters/")[1].split("/", 1)[0]
         print(asset)
-        look_dir = f"{CORE.projectPath}03_Production\\Assets\\Characters\\{asset}\\Look"
+        look_dir = f"{core.projectPath}03_Production\\Assets\\Characters\\{asset}\\Look"
         look_file = f"{look_dir}\\{asset}_look.ma"
         assignment_file = f"{look_dir}\\assignment.xml"
         em.export_shaders(look_file, assignment_file, proxy)
 
-if CHECK_CONTEXT:
+if __name__ == '__main__':
+    # placeholders to be determined by user
+    export_single = False
+    from_selected = False
+    export_all = True
+
     if export_single:
         proxy_export_single()
     
@@ -58,4 +60,4 @@ if CHECK_CONTEXT:
 
     elif export_all:
         proxy_export_all()
-        
+    
